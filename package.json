@@ -1,0 +1,35 @@
+{
+  "name": "pi-weather-collector",
+  "version": "1.0.0",
+  "description": "Collect weather and other sensor data from a BM280 connected to a Raspberry Pi and push it into a cloud based database.",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo 'Starting node with sudo (to enable direct access to I2C bus)'; sudo node ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arronharden/pi-weather-collector.git"
+  },
+  "author": {
+    "name": "Arron Harden",
+    "email": "post@arronharden.com",
+    "url": "https://arronharden.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arronharden/pi-weather-collector/issues"
+  },
+  "homepage": "https://github.com/arronharden/pi-weather-collector#readme",
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0"
+  },
+  "dependencies": {
+    "bme280-sensor": "^0.1.6"
+  }
+}
