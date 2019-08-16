@@ -5,6 +5,11 @@ const INSTANCES = [/* {
   collector: require('./bme280-collector')
 }, */
   {
+    name: 'dht11-0',
+    period: 2000,
+    collector: require('./dht-collector')
+  },
+  {
     name: 'test-0',
     period: 2000,
     collector: require('./test-collector')

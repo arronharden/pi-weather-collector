@@ -30,6 +30,7 @@
     "eslint-plugin-standard": "^4.0.0"
   },
   "dependencies": {
-    "bme280-sensor": "^0.1.6"
+    "bme280-sensor": "^0.1.6",
+    "node-dht-sensor": "^0.3.0"
   }
 }
