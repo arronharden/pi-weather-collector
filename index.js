@@ -1,60 +1,51 @@
 const collectors = require('./collectors')
-
-var initComplete = false
+const postgresClient = require('./persistence/postgres-client')
 
 function init () {
-  return collectors.init()
-    .then((enabledInstances) => {
-      console.log('All collectors initialised.')
+  return postgresClient.init()
+    .then(() => collectors.init())
+    .then((collectorInsts) => {
+      console.log(`Initialised collector instances ${JSON.stringify(collectorInsts)}.`)
 
       // for each instance do an initial collect and write (will also set a timer to repeat)
-      enabledInstances.forEach((inst) => collectAndWrite(inst))
-
-      initComplete = true
+      return collectorInsts.map((collectorInst) => collectAndWrite(collectorInst))
+    })
+    .catch((err) => {
+      console.log(`Initialisation error: ${err}.`, err)
     })
 }
 
 function collectAndWrite (collectorInstance) {
   return collect(collectorInstance)
     .then((data) => {
-      if (data) {
-        return write(collectorInstance, data)
+      if (!data) {
+        console.log(`No data for collector ${collectorInstance.alias} - skipping`)
+      } else {
+        return write(data)
       }
     })
     .then(() => {
-      // Set another timer for this instance
+      // Set another timer for this collector instance
       setTimeout(() => { collectAndWrite(collectorInstance) }, collectorInstance.period)
     })
 }
 
 function collect (collectorInstance) {
-  console.log(`Collecting from instance ${collectorInstance.name}.`)
-  return collectors.collect(collectorInstance.name)
-    .then((data) => {
-      if (!data) {
-        console.log(`No data for instance ${collectorInstance.name} - skipping`)
-      } else {
-        console.log(`Data for instance ${collectorInstance.name} is ${JSON.stringify(data)}`)
-        return data
-      }
-    })
+  return collectorInstance.collector.collect()
     .catch((err) => {
       console.log(`Collect error: ${err}.`, err)
     })
 }
 
-function write (collectorInstance, result) {
-  console.log(`Writing ${JSON.stringify(result)} from instance ${collectorInstance.name}.`)
-  return Promise.resolve()
+function write (data) {
+  return postgresClient.write(data)
+    .then((result) => {
+      console.log(`Wrote measurement ${JSON.stringify(result.rows[0])}`)
+    })
     .catch((err) => {
       console.log(`Write error: ${err}.`, err)
     })
 }
 
+// start everything..
 init()
-setTimeout(() => {
-  if (!initComplete) {
-    console.log('Init did not complete with 30s - exiting')
-    process.exit(20)
-  }
-}, 30 * 1000) // 30s

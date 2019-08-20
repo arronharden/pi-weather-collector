@@ -1,30 +1,34 @@
 const sensor = require('node-dht-sensor').promises
 
-const options = {
-  dhtType: 11, // 11 or 22
-  pin: 4
-}
-
-module.exports.getType = () => 'dht'
-
-module.exports.init = (instanceName) => {
-  // No-op
-}
-
-module.exports.collect = (instanceName) => {
-  /*
-  Read DHTxx sensor data. Promise resolved with:
-  {
-    "temperature_C": 32,
-    "humidity": 34
+class DHTCollector {
+  constructor (alias, config) {
+    this.alias = alias
+    this.config = config
   }
-  */
-  return sensor.read(options.dhtType, options.pin)
-    .then(({ temperature, humidity }) => {
-      // Normalise
-      return {
-        temperature_C: temperature.toFixed(1),
-        humidity: humidity.toFixed(1)
-      }
-    })
+
+  collect () {
+    // Read DHTxx sensor data
+    return sensor.read(this.config.dhtType, this.config.pin)
+      .then(({ temperature, humidity }) => {
+        // Normalise
+        return {
+          alias: this.alias,
+          type: this.getType(),
+          timestamp: (new Date()).toISOString(),
+          temperature: temperature,
+          humidity: humidity
+        }
+      })
+  }
+
+  getType () {
+    return __filename.slice(__dirname.length + 1, -3)
+  }
+
+  init () {
+    // No-op
+    return Promise.resolve()
+  }
 }
+
+module.exports.create = (config) => new DHTCollector(config)
