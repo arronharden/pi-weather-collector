@@ -5,16 +5,22 @@
         "type": "bme280-collector",
         "config": {
             "i2cBusNo": 1,
-            "i2cAddress": "0x77"
+            "i2cAddress": "0x76"
         }
-    },
-    {
+    },{
         "alias": "my dht11 sensor",
         "period": 900000,
         "type": "dht-collector",
         "config": {
             "dhtType": 11,
             "pin": 4
+        }
+    },{
+        "alias": "my ds18b20 sensor",
+        "period": 900000,
+        "type": "ds18b20-collector",
+        "config": {
+            "deviceId": "28-123456789"
         }
     },{
         "alias": "my test sensor",
@@ -27,6 +33,6 @@
         "user": "__set_postgres_user__",
         "password": "__set_postgres_password__",
         "database": "__set_postgres_database__",
-        "table_name": "__set_postgres_tablename__"
+        "tableName": "__set_postgres_tablename__"
     }
 }

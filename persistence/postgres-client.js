@@ -1,8 +1,8 @@
 const { Pool } = require('pg')
 const appConfig = require('../config/app-config.json')
 
-const CREATE_TABLE = `create table if not exists ${appConfig.postgres.table_name} (id serial primary key, alias text, type text, timestamp text, temperature numeric, humidity numeric, pressure numeric);`
-const INSERT_ROW = `INSERT INTO ${appConfig.postgres.table_name}(alias, type, timestamp, temperature, humidity, pressure) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`
+const CREATE_TABLE = `create table if not exists ${appConfig.postgres.tableName} (id serial primary key, alias text, type text, timestamp text, temperature numeric, humidity numeric, pressure numeric);`
+const INSERT_ROW = `INSERT INTO ${appConfig.postgres.tableName}(alias, type, timestamp, temperature, humidity, pressure) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`
 
 let pool
 
