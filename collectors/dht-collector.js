@@ -31,4 +31,4 @@ class DHTCollector {
   }
 }
 
-module.exports.create = (config) => new DHTCollector(config)
+module.exports.create = (alias, config) => new DHTCollector(alias, config)

@@ -3,7 +3,11 @@ const BME280 = require('bme280-sensor')
 class BME280Collector {
   constructor (alias, config) {
     this.alias = alias
-    this.bme280 = new BME280(config)
+    const normConfig = Object.assign({}, config)
+    if (typeof normConfig.i2cAddress === 'string') {
+      normConfig.i2cAddress = parseInt(normConfig.i2cAddress)
+    }
+    this.bme280 = new BME280(normConfig)
   }
 
   collect () {
@@ -30,4 +34,4 @@ class BME280Collector {
   }
 }
 
-module.exports.create = (config) => new BME280Collector(config)
+module.exports.create = (alias, config) => new BME280Collector(alias, config)

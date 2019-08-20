@@ -26,4 +26,4 @@ class TestCollector {
   }
 }
 
-module.exports.create = (config) => new TestCollector(config)
+module.exports.create = (alias, config) => new TestCollector(alias, config)
