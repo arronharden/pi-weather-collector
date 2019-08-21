@@ -28,11 +28,11 @@
         "type": "test-collector"
     }],
     "postgres": {
-        "host": "__set_postgres_hostname__",
+        "host": "localhost",
         "port": 5432,
         "user": "__set_postgres_user__",
         "password": "__set_postgres_password__",
-        "database": "__set_postgres_database__",
-        "tableName": "__set_postgres_tablename__"
+        "database": "pi_weather",
+        "table_name": "measurements"
     }
 }

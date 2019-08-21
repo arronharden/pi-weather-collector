@@ -7,6 +7,9 @@ const INSERT_ROW = `INSERT INTO ${appConfig.postgres.tableName}(alias, type, tim
 let pool
 
 module.exports.init = function () {
+  if (!appConfig.postgres.tableName) {
+    return Promise.reject(new Error('No table name defined'))
+  }
   pool = new Pool({
     user: appConfig.postgres.user,
     host: appConfig.postgres.host,
@@ -15,7 +18,7 @@ module.exports.init = function () {
     port: appConfig.postgres.port
   })
   pool.on('error', (err, client) => {
-    console.error('Unexpected error on idle client: ' + err, err)
+    console.error(`Postgres error: ${err}`, err)
   })
   return pool.query(CREATE_TABLE)
 }
