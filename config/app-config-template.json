@@ -33,6 +33,6 @@
         "user": "__set_postgres_user__",
         "password": "__set_postgres_password__",
         "database": "pi_weather",
-        "table_name": "measurements"
+        "tableName": "measurements"
     }
 }
