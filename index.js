@@ -41,10 +41,24 @@ function init () {
       return collectorInsts.map((collectorInst) => collectAndWrite(collectorInst))
     })
 }
+function _timeoutPromise (req, timeoutMS, promise, msg) {
+  if (!timeoutMS) {
+    return promise
+  }
+  const timeoutPromise = new Promise((resolve, reject) => {
+    setTimeout(function () {
+      const err = errorUtil.createInternalError(messages.AIQCU0023E,
+        [`Time out of ${timeoutMS}ms exceded. msg=${msg}`],
+        req, messages.getMessageDetails)
+      reject(err)
+    }, timeoutMS)
+  })
+  return Promise.race([promise, timeoutPromise])
+}
 
 function collectAndWrite (collectorInstance) {
   console.log(`Collecting measurements for ${collectorInstance.alias}`)
-  return collect(collectorInstance)
+  return collect(collectorInstance, 5, 5000)
     .then((data) => {
       if (!data) {
         console.log(`No measurements for collector ${collectorInstance.alias} - skipping`)
@@ -59,10 +73,25 @@ function collectAndWrite (collectorInstance) {
     })
 }
 
-function collect (collectorInstance) {
-  return collectorInstance.collector.collect()
+function collect (collectorInstance, numRetries, retryDelayMS) {
+  const timeoutPromise = new Promise((resolve, reject) => {
+    setTimeout(function () {
+      reject(new Error(`Timeout waiting for collector ${collectorInstance.alias} to respond.`))
+    }, 5000)
+  })
+  const collectPromise = collectorInstance.collector.collect()
+  return Promise.race([collectPromise, timeoutPromise])
     .catch((err) => {
-      console.error(`Collect error: ${err}.`, err)
+      // collect failed (or timed out), if allowed retry again after waiting for the retryDelay
+      if (numRetries > 0) {
+        return new Promise((resolve, reject) => {
+          setTimeout(function () {
+            console.warn(`Collect error: [${err}]. Retrying again now. numRetries=${numRetries - 1}`, err)
+            collect(collectorInstance, numRetries - 1, retryDelayMS).then(resolve, reject)
+          }, retryDelayMS)
+        })
+      }
+      console.error(`Giving up collection after all retries exhausted: ${err}`, err)
     })
 }
 

@@ -20,7 +20,8 @@ class TestCollector {
       pressure: this._getNext(this.last.pressure, 50, 800, 1200)
     }
     this.last = next
-    return Promise.resolve(next)
+    // return Promise.resolve(next)
+    return new Promise((resolve, reject) => {})
   }
 
   getType () {
