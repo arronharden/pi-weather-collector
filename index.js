@@ -1,21 +1,27 @@
 const collectors = require('./collectors')
 const postgresClient = require('./persistence/postgres-client')
+const fs = require('fs')
 
 function init () {
-  console.log(`Process starting on PID ${process.pid}`)
+  console.log(`Process starting with PID ${process.pid}`)
+  fs.writeFile('./.pwc.pid', process.pid, function (err) {
+    if (err) {
+      return console.error(`Failed to write PID file: ${err}`, err)
+    }
+  })
 
   // add some exit handlers
   process.on('exit', function () {
-    console.log('Exit handler - process finishing.')
+    console.log(`Exit handler - process ${process.pid} finishing.`)
   })
   process.on('SIGINT', function () {
     // catch ctrl+c event and exit normally
-    console.log('SIGINT (ctrl-c) caught.')
+    console.log(`SIGINT (ctrl-c) caught in process ${process.pid}.`)
     process.exit(0)
   })
   process.on('uncaughtException', function (e) {
     // catch uncaught exceptions
-    console.error(`Uncaught exception ${e}.`, e)
+    console.error(`Uncaught exception in process ${process.pid}: ${e}.`, e)
     process.exit(99)
   })
 

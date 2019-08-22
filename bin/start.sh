@@ -17,6 +17,4 @@ fi
 
 echo "Starting pi-weather-collector as background process"
 nohup sh -c "echo; echo; echo 'Starting...'; date; cd ${ROOT_DIR}; set +e; DEBUG=pi-weather-collector:* npm start; sleep 1; echo 'Process exit, removing PID file'; rm -f ${PID_FILE}; echo 'Done'" >> ${LOG_FILE} 2>&1 &
-PID=`echo $!`
-echo ${PID} > ${PID_FILE}
-echo "Successfully started pi-weather-collector as pid ${PID}, logging to ${LOG_FILE}."
+echo "Successfully started pi-weather-collector logging to ${LOG_FILE}."
