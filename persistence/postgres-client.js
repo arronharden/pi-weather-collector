@@ -23,7 +23,7 @@ module.exports.init = function () {
   })
   return pool.query(CREATE_TABLE)
     .then(() => {
-      const info = Object.assign({}, config, { password: '********' })
+      const info = Object.assign({}, config, { password: '********', tableName: appConfig.postgres.tableName })
       console.log(`Initialised postgres ${JSON.stringify(info)}.`)
     })
 }
