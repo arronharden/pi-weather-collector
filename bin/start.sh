@@ -1,8 +1,8 @@
 #!/bin/sh
 
 ROOT_DIR="$(dirname "$0")/.."
-PID_FILE=${ROOT_DIR}/.pwc.pid
-LOG_FILE=${ROOT_DIR}/pwc.log
+PID_FILE=${ROOT_DIR}/.pw_col.pid
+LOG_FILE=${ROOT_DIR}/pw_col.log
 
 if [ -f "${PID_FILE}" ]
 then
