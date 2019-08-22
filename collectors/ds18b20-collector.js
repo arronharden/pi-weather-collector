@@ -17,6 +17,11 @@ class DS18B20Collector {
             reject(new Error(`Failed to read sensor data for deviceId=${deviceId}: ${err}`))
             return
           }
+          if (!temp) {
+            // bad result returned
+            throw new Error('Bad result returned (no data)')
+          }
+
           resolve({
             // Normalise
             alias: this.alias,
@@ -32,6 +37,11 @@ class DS18B20Collector {
             reject(new Error(`Failed to read sensor data: ${err}`))
             return
           }
+          if (!temp) {
+            // bad result returned
+            throw new Error('Bad result returned (no data)')
+          }
+
           resolve({
             // Normalise
             alias: this.alias,

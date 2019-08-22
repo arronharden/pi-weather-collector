@@ -13,15 +13,22 @@ class BME280Collector {
   collect () {
     // Read BME280 sensor data
     return this.bme280.readSensorData()
-      .then((data) => ({
+      .then((data) => {
+        if (!data || (!data.temperature_C && !data.humidity && !data.pressure_hPa)) {
+          // bad result returned
+          throw new Error('Bad result returned (no data)')
+        }
+
         // Normalise
-        alias: this.alias,
-        type: this.getType(),
-        timestamp: (new Date()).toISOString(),
-        temperature: data.temperature_C,
-        humidity: data.humidity,
-        pressure: data.pressure_hPa
-      }))
+        return {
+          alias: this.alias,
+          type: this.getType(),
+          timestamp: (new Date()).toISOString(),
+          temperature: data.temperature_C,
+          humidity: data.humidity,
+          pressure: data.pressure_hPa
+        }
+      })
   }
 
   getType () {

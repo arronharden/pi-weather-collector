@@ -2,30 +2,56 @@ const collectors = require('./collectors')
 const postgresClient = require('./persistence/postgres-client')
 
 function init () {
-  return postgresClient.init()
-    .then(() => collectors.init())
+  console.log(`Process starting on PID ${process.pid}`)
+
+  // add some exit handlers
+  process.on('exit', function () {
+    console.log('Exit handler - process finishing.')
+  })
+  process.on('SIGINT', function () {
+    // catch ctrl+c event and exit normally
+    console.log('SIGINT (ctrl-c) caught.')
+    process.exit(0)
+  })
+  process.on('uncaughtException', function (e) {
+    // catch uncaught exceptions
+    console.error(`Uncaught exception ${e}.`, e)
+    process.exit(99)
+  })
+
+  return postgresClient.init() // init postgress
+    .then(() => collectors.init()) // init the collectors
     .then((collectorInsts) => {
-      console.log(`Initialised collector instances ${JSON.stringify(collectorInsts)}.`)
+      collectorInsts.forEach((inst) => {
+        const info = Object.assign({}, {
+          alias: inst.alias,
+          period: inst.period,
+          type: inst.collector.getType()
+        })
+        console.log(`Initialised collector instance ${JSON.stringify(info)}.`)
+      })
 
       // for each instance do an initial collect and write (will also set a timer to repeat)
       return collectorInsts.map((collectorInst) => collectAndWrite(collectorInst))
     })
     .catch((err) => {
-      console.log(`Initialisation error: ${err}.`, err)
+      console.error(`Initialisation error: ${err}.`, err)
     })
 }
 
 function collectAndWrite (collectorInstance) {
+  console.log(`Collecting measurements for ${collectorInstance.alias}`)
   return collect(collectorInstance)
     .then((data) => {
       if (!data) {
-        console.log(`No data for collector ${collectorInstance.alias} - skipping`)
+        console.log(`No measurements for collector ${collectorInstance.alias} - skipping`)
       } else {
         return write(data)
       }
     })
     .then(() => {
       // Set another timer for this collector instance
+      console.log(`Next collection of ${collectorInstance.alias} measurements will be in ${collectorInstance.period / 1000}s`)
       setTimeout(() => { collectAndWrite(collectorInstance) }, collectorInstance.period)
     })
 }
@@ -33,7 +59,7 @@ function collectAndWrite (collectorInstance) {
 function collect (collectorInstance) {
   return collectorInstance.collector.collect()
     .catch((err) => {
-      console.log(`Collect error: ${err}.`, err)
+      console.error(`Collect error: ${err}.`, err)
     })
 }
 
@@ -43,7 +69,8 @@ function write (data) {
       console.log(`Wrote measurement ${JSON.stringify(result.rows[0])}`)
     })
     .catch((err) => {
-      console.log(`Write error: ${err}.`, err)
+      // log and continue
+      console.error(`Write error: ${err}.`, err)
     })
 }
 

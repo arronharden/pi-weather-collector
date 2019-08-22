@@ -10,6 +10,11 @@ class DHTCollector {
     // Read DHTxx sensor data
     return sensor.read(this.config.dhtType, this.config.pin)
       .then(({ temperature, humidity }) => {
+        if (!temperature && !humidity) {
+          // bad result returned
+          throw new Error('Bad result returned (no data)')
+        }
+
         // Normalise
         return {
           alias: this.alias,
