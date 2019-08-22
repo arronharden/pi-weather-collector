@@ -10,17 +10,22 @@ module.exports.init = function () {
   if (!appConfig.postgres.tableName) {
     return Promise.reject(new Error('No table name defined'))
   }
-  pool = new Pool({
+  const config = {
     user: appConfig.postgres.user,
     host: appConfig.postgres.host,
     database: appConfig.postgres.database,
     password: appConfig.postgres.password,
     port: appConfig.postgres.port
-  })
+  }
+  pool = new Pool(config)
   pool.on('error', (err, client) => {
     console.error(`Postgres error: ${err}`, err)
   })
   return pool.query(CREATE_TABLE)
+    .then(() => {
+      const info = Object.assign({}, config, { password: '********' })
+      console.log(`Initialised postgres ${JSON.stringify(info)}.`)
+    })
 }
 
 module.exports.write = function (data) {

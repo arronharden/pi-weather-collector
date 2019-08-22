@@ -6,7 +6,7 @@ function init () {
   console.log(`Process starting with PID ${process.pid}`)
   fs.writeFile('./.pwc.pid', process.pid, function (err) {
     if (err) {
-      return console.error(`Failed to write PID file: ${err}`, err)
+      console.error(`Failed to write PID file: ${err}`, err)
     }
   })
 
@@ -39,9 +39,6 @@ function init () {
 
       // for each instance do an initial collect and write (will also set a timer to repeat)
       return collectorInsts.map((collectorInst) => collectAndWrite(collectorInst))
-    })
-    .catch((err) => {
-      console.error(`Initialisation error: ${err}.`, err)
     })
 }
 
@@ -82,3 +79,10 @@ function write (data) {
 
 // start everything..
 init()
+  .catch((err) => {
+    console.error(`Initialisation error: ${err}.`, err)
+    process.exit(20)
+  })
+
+// run forever..
+var done = (function wait () { if (!done) setTimeout(wait, 1000) })()
