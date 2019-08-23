@@ -19,7 +19,7 @@ class DS18B20Collector {
           }
           if (!temp) {
             // bad result returned
-            throw new Error('Bad result returned (no data)')
+            reject(new Error('Bad result returned (no data)'))
           }
 
           resolve({
@@ -39,7 +39,7 @@ class DS18B20Collector {
           }
           if (!temp) {
             // bad result returned
-            throw new Error('Bad result returned (no data)')
+            reject(new Error('Bad result returned (no data)'))
           }
 
           resolve({
