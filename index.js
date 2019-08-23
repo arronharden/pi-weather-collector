@@ -4,7 +4,7 @@ const fs = require('fs')
 
 function init () {
   console.log(`Process starting with PID ${process.pid}`)
-  fs.writeFile('./.pwc.pid', process.pid, function (err) {
+  fs.writeFile('./.pw_col.pid', process.pid, function (err) {
     if (err) {
       console.error(`Failed to write PID file: ${err}`, err)
     }
