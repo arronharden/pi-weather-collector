@@ -59,4 +59,10 @@ typings/
 
 # next.js build output
 .next
-config/app-config.json
+
+# app configs
+!config/app-config-template.json
+config/app-config*.json
+
+# app logs
+pw_col.log

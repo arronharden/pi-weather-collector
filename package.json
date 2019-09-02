@@ -1,10 +1,12 @@
 {
   "name": "pi-weather-collector",
   "version": "1.0.0",
-  "description": "Collect external sensor data (e.g. temperature, pressure, humidity) using a Raspberry Pi and push it into a database. Supports BME280, DHT11, DHT22, and DS18B20.",
+  "description": "Collect external sensor data (e.g. temperature, pressure, humidity) using a Raspberry Pi and push it into a database. Supports BME280, DHT11, DHT22, and DS18B20 sensors.",
   "main": "index.js",
   "scripts": {
-    "start": "node ./",
+    "start": "./node_modules/pm2/bin/pm2 start ./ecosystem.config.js",
+    "start_mock": "./node_modules/pm2/bin/pm2 start ./ecosystem.config.js --env mock",
+    "stop": "./node_modules/pm2/bin/pm2 stop pi-weather-collector",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,7 +29,8 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-standard": "^4.0.1",
+    "pm2": "^3.5.1"
   },
   "dependencies": {
     "bme280-sensor": "^0.1.6",

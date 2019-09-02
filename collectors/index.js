@@ -1,5 +1,4 @@
-
-const appConfig = require('../config/app-config.json')
+const appConfig = require('../config')
 
 function _createAndInit (defn) {
   const collectorType = require('./' + defn.type)

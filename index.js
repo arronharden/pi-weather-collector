@@ -1,14 +1,8 @@
 const collectors = require('./collectors')
 const postgresClient = require('./persistence/postgres-client')
-const fs = require('fs')
 
 function init () {
-  console.log(`Process starting with PID ${process.pid}`)
-  fs.writeFile('./.pw_col.pid', process.pid, function (err) {
-    if (err) {
-      console.error(`Failed to write PID file: ${err}`, err)
-    }
-  })
+  console.log(`Process starting with PID=${process.pid} and APP_CONFIG=${process.env.APP_CONFIG}`)
 
   // add some exit handlers
   process.on('exit', function () {
@@ -40,20 +34,6 @@ function init () {
       // for each instance do an initial collect and write (will also set a timer to repeat)
       return collectorInsts.map((collectorInst) => collectAndWrite(collectorInst))
     })
-}
-function _timeoutPromise (req, timeoutMS, promise, msg) {
-  if (!timeoutMS) {
-    return promise
-  }
-  const timeoutPromise = new Promise((resolve, reject) => {
-    setTimeout(function () {
-      const err = errorUtil.createInternalError(messages.AIQCU0023E,
-        [`Time out of ${timeoutMS}ms exceded. msg=${msg}`],
-        req, messages.getMessageDetails)
-      reject(err)
-    }, timeoutMS)
-  })
-  return Promise.race([promise, timeoutPromise])
 }
 
 function collectAndWrite (collectorInstance) {

@@ -1,2 +1,2 @@
 # pi-weather-collector
-Collect weather and other sensor data from a BM280 connected to a Raspberry Pi and push it into a cloud based database.
+Collect external sensor data (e.g. temperature, pressure, humidity) using a Raspberry Pi and push it into a database. Supports BME280, DHT11, DHT22, and DS18B20 sensors.
