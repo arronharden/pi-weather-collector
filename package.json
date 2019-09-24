@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2 start ./ecosystem.config.js",
-    "start_mock": "pm2 start ./ecosystem.config.js --env mock",
+    "start:dev": "nodemon bin/www -- {@}",
     "stop": "pm2 stop pi-weather-collector",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,12 +30,14 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "nodemon": "^1.19.2",
     "pm2": "^3.5.1"
   },
   "dependencies": {
     "bme280-sensor": "^0.1.6",
     "ds18b20-raspi": "^0.3.3",
     "node-dht-sensor": "^0.3.0",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "yargs": "^14.0.0"
   }
 }
