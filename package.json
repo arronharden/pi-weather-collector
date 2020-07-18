@@ -24,20 +24,20 @@
   },
   "homepage": "https://github.com/arronharden/pi-weather-collector#readme",
   "devDependencies": {
-    "eslint": "^6.2.0",
+    "eslint": "^6.8.0",
     "eslint-config-standard": "^13.0.1",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^9.2.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "nodemon": "^1.19.2",
-    "pm2": "^3.5.1"
+    "nodemon": "^1.19.4"
   },
   "dependencies": {
     "bme280-sensor": "^0.1.6",
-    "ds18b20-raspi": "^0.3.3",
+    "ds18b20-raspi": "^0.3.4",
     "node-dht-sensor": "^0.3.0",
-    "pg": "^7.12.1",
-    "yargs": "^14.0.0"
+    "pg": "^7.18.2",
+    "pm2": "^4.4.0",
+    "yargs": "^14.2.3"
   }
 }
