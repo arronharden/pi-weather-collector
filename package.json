@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "bme280-sensor": "^0.1.6",
-    "ds18b20-raspi": "^0.3.4",
+    "ds18b20-raspi": "^0.3.6",
     "node-dht-sensor": "^0.3.0",
     "pg": "^7.18.2",
     "pm2": "^4.5.6",
